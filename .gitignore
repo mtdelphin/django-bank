@@ -1,4 +1,5 @@
 .vscode
+.idea
 staticfiles/
 .envs/*
 !.envs/.env.example
