@@ -23,10 +23,10 @@ collectstatic:
 	docker compose -f local.yml run --rm api python manage.py collectstatic --no-input --clear
 
 superuser:
-	docker compose -f local.yml run --rm api manage.py createsuperuser
+	docker compose -f local.yml run --rm api python manage.py createsuperuser
 
 flush:
-	docker compose -f local.yml run --rm api manage.py flush
+	docker compose -f local.yml run --rm api python manage.py flush
 
 network-inspect:
 	docker network inspect banker_local_nw
