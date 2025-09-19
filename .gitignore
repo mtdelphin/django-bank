@@ -3,7 +3,7 @@
 staticfiles/
 .envs/*
 !.envs/.env.example
-notes
+/stream
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
