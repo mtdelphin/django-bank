@@ -8,7 +8,7 @@ from .models import ContentView
 
 
 @admin.register(ContentView)
-class ContentViewAdmin(ContentView):
+class ContentViewAdmin(admin.ModelAdmin):
     list_display = [
         "content_object",
         "content_type",
