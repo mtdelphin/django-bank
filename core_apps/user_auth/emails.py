@@ -11,7 +11,7 @@ def send_otp_email(email, otp):
         Send OTP by email
     """
     subject = _("Your OTP code for Login")
-    from_email = settings.DEFAULT_FROM_MAIL
+    from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [email]
     context = {
         "otp": otp,
@@ -35,7 +35,7 @@ def send_account_locked_email(self):
         Send account locked email
     """
     subject = _("Your account has been locked")
-    from_email = settings.DEFAULT_FROM_MAIL
+    from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [self.email]
     context = {
         "user": self,

@@ -83,7 +83,7 @@ class User(AbstractUser):
             return True
         return False
 
-    def handle_failed_login_attempt(self) -> None:
+    def handle_failed_login_attempts(self) -> None:
         self.failed_login_attempts += 1
         self.last_failed_login = timezone.now()
 

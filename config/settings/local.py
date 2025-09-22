@@ -22,12 +22,12 @@ ADMIN_URL = getenv('ADMIN_URL')
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend' #'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = getenv('EMAIL_HOST')
 EMAIL_PORT = getenv('EMAIL_PORT')
-DEFAULT_EMAIL_FROM = getenv('DEFAULT_EMAIL_FROM')
+DEFAULT_FROM_EMAIL = getenv('DEFAULT_FROM_EMAIL')
 DOMAIN = getenv('DOMAIN')
 
 MAX_UPLOAD_SIZE = 1 * 1024 * 1024
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
 LOCKOUT_DURATION = timedelta(minutes=1)
-LOGIN_ATTEMPS = 3
+LOGIN_ATTEMPTS = 3
 OTP_EXPIRATION = timedelta(minutes=1)
