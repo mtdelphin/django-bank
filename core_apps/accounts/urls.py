@@ -5,6 +5,11 @@ from .views import (
     InitiateWithdrawalView,
     VerifyUsernameAndWithdrawView
 )
+from .transfer_view import(
+    InitiateTransferView,
+    VerifyOTPView,
+    VerifySecurityQuestionView
+)
 
 urlpatterns = [
     path(
@@ -18,13 +23,28 @@ urlpatterns = [
         name="account_deposit",
     ),
     path(
-        "initiate-withdrawal/",
+        "withdrawal/initiate/",
         InitiateWithdrawalView.as_view(),
         name="initiate_withdrawal",
     ),
     path(
-        "verify-username-and-withdraw/",
+        "withdrawal/verify-username-and-withdraw/",
         VerifyUsernameAndWithdrawView.as_view(),
         name="verify_username_and_withdraw",
+    ),
+    path(
+        "transfer/initiate/",
+        InitiateTransferView.as_view(),
+        name="initiate_transfer",
+    ),
+    path(
+        "transfer/verify-security-question/",
+        VerifySecurityQuestionView.as_view(),
+        name="verify_security_question",
+    ),
+    path(
+        "transfer/verify-otp/",
+        VerifyOTPView.as_view(),
+        name="verify_otp",
     ),
 ]

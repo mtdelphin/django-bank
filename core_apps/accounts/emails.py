@@ -145,7 +145,7 @@ def send_transfer_email(
     )
     sender_plain_email = strip_tags(sender_html_email)
     sender_email_obj = EmailMultiAlternatives(
-        subject, sender_plain_email, from_email, sender_email
+        subject, sender_plain_email, from_email, [sender_email]
     )
     sender_email_obj.attach_alternative(sender_html_email, "text/html")
 
@@ -161,7 +161,7 @@ def send_transfer_email(
     )
     receiver_plain_email = strip_tags(receiver_html_email)
     receiver_email_obj = EmailMultiAlternatives(
-        subject, receiver_plain_email, from_email, receiver_email
+        subject, receiver_plain_email, from_email, [receiver_email]
     )
     receiver_email_obj.attach_alternative(receiver_html_email, "text/html")
 
@@ -186,7 +186,7 @@ def send_tranfer_otp_email(email, otp) -> None:
         "site_name": settings.SITE_NAME,
     }
 
-    html_email = render_to_string("emails/transfer_otp_email.html", context)
+    html_email = render_to_string("emails/otp_transfer_email.html", context)
     plain_email = strip_tags(html_email)
     email = EmailMultiAlternatives(subject, plain_email, from_email, recipient_list)
     email.attach_alternative(html_email, "text/html")

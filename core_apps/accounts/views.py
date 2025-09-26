@@ -6,15 +6,13 @@ from django.utils import timezone
 from rest_framework import generics, status, serializers
 from rest_framework.request import Request
 from rest_framework.response import Response
+from loguru import logger
 from core_apps.common.permissions import IsAccountExecutive, IsTeller
 from core_apps.common.renderers import GenericJSONRenderer
-from loguru import logger
 from .emails import (
     send_full_activation_email,
     send_deposit_email,
     send_withdrawal_email,
-    send_transfer_email,
-    send_tranfer_otp_email,
 )
 from .models import BankAccount, Transaction
 from .serialiers import (
@@ -227,7 +225,7 @@ class InitiateWithdrawalView(generics.CreateAPIView):
                 "to complete the withdrawal",
                 "next_step": "Verify your username to complete the withdrawal",
             },
-            status=status.HTTP_201_CREATED,
+            status=status.HTTP_200_OK,
         )
 
 
@@ -302,5 +300,5 @@ class VerifyUsernameAndWithdrawView(generics.CreateAPIView):
                 "message": "Withdrawal completed successfully",
                 "transaction": TransactionSerializer(withdraw_transaction).data,
             },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_201_CREATED,
         )
