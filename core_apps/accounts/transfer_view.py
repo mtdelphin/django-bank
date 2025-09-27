@@ -1,16 +1,25 @@
+from dateutil import parser
 from decimal import Decimal
 from typing import Any
 
+from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q
 from loguru import logger
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 
 from core_apps.common.renderers import GenericJSONRenderer
 from core_apps.user_auth.utils import generate_otp
 from .emails import send_tranfer_otp_email, send_transfer_email
 from .models import BankAccount, Transaction
-from .serialiers import TransactionSerializer, SecurityQuestionSerializer, OTPVerificationSerializer
+from .pagination import StandardResultsSetPagination
+from .serialiers import (
+    TransactionSerializer,
+    SecurityQuestionSerializer,
+    OTPVerificationSerializer,
+)
 
 
 class InitiateTransferView(generics.CreateAPIView):
@@ -175,3 +184,62 @@ class VerifyOTPView(generics.CreateAPIView):
             TransactionSerializer(transfer_transaction).data,
             status=status.HTTP_201_CREATED,
         )
+
+
+class TransactionListAPIView(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ["created_at", "amount"]
+    ordering = ["-created_at"]
+
+    def get_queryset(self):
+        user = self.request.user
+        query_set = Transaction.objects.filter(Q(sender=user) | Q(receiver=user))
+        start_date = self.request.query_params.get("start_date")
+        end_date = self.request.query_params.get("end_date")
+
+        account_number = self.request.query_params.get("account_number")
+
+        if start_date:
+            try:
+                start_date = parser.parse(start_date)
+                query_set = query_set.filter(Q(created_at__gte=start_date))
+            except ValueError:
+                pass
+
+        if end_date:
+            try:
+                end_date = parser.parse(end_date)
+                query_set = query_set.filter(Q(created_at__lte=end_date))
+            except ValueError:
+                pass
+
+        if account_number:
+            try:
+                account = BankAccount.objects.get(
+                    account_number=account_number, user=user
+                )
+                query_set = query_set.filter(
+                    Q(sender_account=account) | Q(receiver_account=account)
+                )
+            except BankAccount.DoesNotExist:
+                query_set = Transaction.objects.none()
+
+        return query_set
+
+    def list(self, request, *args, **kwargs) -> Response:
+        response = super().list(request, *args, **kwargs)
+
+        account_number = self.request.query_params.get("account_number")
+        if account_number:
+            logger.info(
+                f"User {request.user.email} successfully retrieved transactions "
+                "for account {account_number}"
+            )
+        else:
+            logger.info(
+                f"User {request.user.email} successfully retrieved transactions (all accounts)"
+            )
+
+        return response
