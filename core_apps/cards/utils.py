@@ -14,7 +14,7 @@ def generate_card_number(
     random_digits_length = length - len(total_prefix) - 1
 
     if random_digits_length < 0:
-        raise ValueError(f"Prefix and code are too long for the specified card length")
+        raise ValueError("Prefix and code are too long for the specified card length")
 
     number = total_prefix
     number += "".join([str(random.randint(0, 9)) for _ in range(random_digits_length)])

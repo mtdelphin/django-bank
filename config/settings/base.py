@@ -158,7 +158,9 @@ DEFAULT_PHONE_NUMBER = "+22997123456"
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_AUTHENTICATION_CLASSES": ["core_apps.common.cookie_auth.CookieAuthentication"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "core_apps.common.cookie_auth.CookieAuthentication"
+    ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
@@ -225,6 +227,12 @@ CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_SEND_TASK_EVENTS = True
+
+CELERY_BEAT_SCHEDULE = {
+    "apply-daily-interest": {
+        "task": "apply_daily_interest",
+    }
+}
 
 CLOUDINARY_API_KEY = getenv("CLOUDINARY_API_KEY")
 CLOUDINARY_API_SECRET = getenv("CLOUDINARY_API_SECRET")
