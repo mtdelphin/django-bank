@@ -139,7 +139,7 @@ class DepositView(generics.CreateAPIView):
             return Response(
                 {
                     "message": f"Successfully deposited {amount} to account "
-                    "{account.account_number}",
+                    f"{account.account_number}",
                     "new_balance": str(account.account_balance),
                 },
                 status=status.HTTP_200_OK,
